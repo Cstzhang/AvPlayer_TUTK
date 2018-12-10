@@ -1,2 +1,2 @@
 # AvPlayer_TUTK
-player demo (recorder tutk)
+player demo (ios recorder tutk)
