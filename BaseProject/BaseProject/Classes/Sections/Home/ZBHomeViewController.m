@@ -7,143 +7,163 @@
 //
 
 #import "ZBHomeViewController.h"
-//#import "avformat.h"
+#import "ZBTutkClient.h"
+#import "ZBH264Decoder.h"
+
+#import "AVAPIs.h"
+#import "AVIOCTRLDEFs.h"
+#import "IOTCAPIs.h"
+#import "AVFRAMEINFO.h"
+
+
+
+#define MAX_SIZE_IOCTRL_BUF        1024
+
 @interface ZBHomeViewController ()
+
+@property (nonatomic,strong) UIImageView *imageView;
+
 
 @end
 
-@implementation ZBHomeViewController
+@implementation ZBHomeViewController{
+    BOOL            isFindIFrame;
+    BOOL            _firstDecoded;
+    CGRect          rect;
+    ZBH264Decoder   *_decoder;
+    
+//    OpenAL2 *_openAl2;
+//    PCMDataPlayer *_pcmDataPlayer;
+//    PCMAudioRecorder *_pcmRecorder;
+//    int  _avchannelForSendAudioData;
+//    FILE *_pcmFile;
+    unsigned int _timeStamp;
+    
+}
+
+#pragma mark -  Life Cycle Methods
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+
+    ZBTutkClient *client = [[ZBTutkClient alloc] init];
+    
+    #warning set your UID
+    [client start:@"C1KAB554Z3RMHH6GU1Z1"];
+    // add observer to show Ifame image
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveBuffer:) name:@"client" object:nil];
+    
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    rect = CGRectMake(0, 20, screenWidth, screenWidth * 16 / 9);
+    UIView *containerView = [[UIView alloc] initWithFrame:rect];
+    self.imageView = [[UIImageView alloc] initWithFrame:rect];
+    self.imageView.image = [self getBlackImage];
+    
+    [containerView addSubview:self.imageView];
+    [self.view addSubview:containerView];
+    
+    [MBProgressHUD zb_showActivity];
+    
+    
+    [self initData];
+    
     
 
-    
-    //test http
-
-//    [self testHUD];
-//    [self testHttp];
-    
-    
-    
-    
-    
 }
 
 
 
 
-#pragma mark - test testHUD
-- (void)testHUD
+#pragma mark -  Private Methods
+
+- (void)initData
 {
-    
-    //    [MBProgressHUD zb_showActivity:self.view];
-    //    [MBProgressHUD zb_showActivityMessage:@"加载中..."
-    //                                   toView:self.view];
-    //    [MBProgressHUD zb_showSuccess:@"登录成功"
-    //                           toView:self.view
-    //                       completion:nil];
-    
-    //    [MBProgressHUD zb_showError:@"失败提示"
-    //                         toView:self.view
-    //                     completion:nil];
-    
-    //    [MBProgressHUD zb_showInfo:@"信息提示"
-    //                        toView:self.view
-    //                    completion:nil];
-    
-    //    [MBProgressHUD zb_showWarning:@"警告提示"
-    //                           toView:self.view
-    //                       completion:nil];
+    _decoder = [[ZBH264Decoder alloc] init];
+    [_decoder initVideoDecoder];
     
     
-    //    [MBProgressHUD zb_showMessage:@"信息提示"
-    //                           toView:self.view
-    //                         position:ZBHUDPositionBottomStyle
-    //                       completion:^{
-    //                           NSLog(@"显示完成");
-    //                       }];
-    //    [MBProgressHUD zb_showMessage:@"标题"
-    //                    detailMessage:@"详情"];
-//         __weak typeof(self) weakSelf = self;
-//        [MBProgressHUD zb_showModelSwitch:self.view
-//                                    title:@"准备下载..."
-//                              configBlock:^(MBProgressHUD *hud) {
-//                                  dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-//                                      // Do something useful in the background and update the HUD periodically.
-//                                      [weakSelf doSomeWorkWithMixedProgress:hud];
-//                                      dispatch_async(dispatch_get_main_queue(), ^{
-//                                          [hud hideAnimated:YES];
-//                                      });
-//                                  });
-//                              }];
     
 }
 
-- (void)doSomeWorkWithMixedProgress:(MBProgressHUD *)hud {
-    // Indeterminate mode
-    sleep(2);
-    // Switch to determinate mode
-    dispatch_async(dispatch_get_main_queue(), ^{
-        hud.mode = MBProgressHUDModeDeterminate;
-        hud.label.text = NSLocalizedString(@"Loading...", @"HUD loading title");
-    });
-    float progress = 0.0f;
-    while (progress < 1.0f) {
-        progress += 0.01f;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            hud.progress = progress;
-        });
-        usleep(50000);
+- (BOOL)detectIFrame:(uint8_t *)nalBuffer size:(int)size {
+    
+    NSString *string1 = @"";
+    int dataLength = size > 100 ? 100 : size;
+    for (int i = 0; i < dataLength; i ++) {
+        NSString *temp = [NSString stringWithFormat:@"%x", nalBuffer[i]&0xff];
+        if ([temp length] == 1) {
+            temp = [NSString stringWithFormat:@"0%@", temp];
+        }
+        string1 = [string1 stringByAppendingString:temp];
     }
-    // Back to indeterminate mode
-    dispatch_async(dispatch_get_main_queue(), ^{
-        hud.mode = MBProgressHUDModeIndeterminate;
-        hud.label.text = NSLocalizedString(@"Cleaning up...", @"HUD cleanining up title");
-    });
-    sleep(2);
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        UIImage *image = [[UIImage imageNamed:@"MBProgressHUD.bundle/success"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-        hud.customView = imageView;
-        hud.mode = MBProgressHUDModeCustomView;
-        hud.label.text = NSLocalizedString(@"Completed", @"HUD completed title");
-    });
-    sleep(2);
-}
-
-
-
-#pragma mark - test http
-
-- (void)testHttp
-{
-    [ZBRequestManager requestWithConfig:^(ZBURLRequest *request) {
-        request.URLString=@"http://39.104.94.117:8088/opssee-api/V1_0/directseedinglogin";
-        request.methodType=ZBMethodTypePOST;//默认为GET
-        request.apiType=ZBRequestTypeRefresh;//默认为ZBRequestTypeRefresh
-        request.requestSerializer = ZBJSONRequestSerializer;
-        request.parameters = @{
-                               @"userId":@"1234567890",
-                               @"idToken":@"1394528869756041231",
-                               @"fullName":@"12345678901",
-                               @"givenName":@"12345678901",
-                               @"familyName":@"12345678901",
-                               @"email":@"1234567890@qq.com",
-                               @"clientType":@"2",
-                               @"thirdType":@"2",
-                               @"placeUserId":@"1234567890",
-                               };
-    } success:^(id responseObject, ZBApiType type, BOOL isCache) {
-        
-        NSLog(@" responseObject %@",responseObject);
-    } failure:^(NSError *error) {
-        
-        NSLog(@" error %@",error.localizedDescription);
-    }];
+    //    NSLog(@"%d,,%@",size,string1);
+    NSRange range = [string1 rangeOfString:@"00000000165"];
+    if (range.location == NSNotFound) {
+        isFindIFrame = NO;
+        return NO;
+    } else {
+        isFindIFrame = YES;
+        [MBProgressHUD zb_hideHUD];
+        return YES;
+    }
     
 }
+
+- (void)decodeFramesToImage:(uint8_t *)nalBuffer size:(int)inSize timeStamp:(unsigned int)pts {
+    
+    //    调节分辨率后，能自适应，但清晰度有问题
+    //    经过确认，是output值设置的问题。outputWidth、outputHeight代表输出图像的宽高，设置的和分辨率一样，是最清晰的效果
+
+    CGSize fSize = [_decoder decodeNalu:nalBuffer frameSize:inSize timeStamp:pts];
+    if (fSize.width == 0) {
+        return;
+    }
+    
+    UIImage *image = [_decoder currentImage];
+    
+    if (image) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.imageView.image = image;
+        });
+    }
+}
+
+
+- (UIImage *)getBlackImage
+{
+    CGSize imageSize = CGSizeMake(50, 50);
+    UIGraphicsBeginImageContextWithOptions(imageSize, 0, [UIScreen mainScreen].scale);
+    [[UIColor colorWithRed:0 green:0 blue:0 alpha:1.0] set];
+    UIRectFill(CGRectMake(0, 0, imageSize.width, imageSize.height));
+    UIImage *pressedColorImg = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return pressedColorImg;
+}
+
+
+#pragma mark - Public method
+
+
+
+
+
+
+
+- (void)receiveBuffer:(NSNotification *)notification{
+    NSDictionary *dict = (NSDictionary *)notification.object;
+    NSData *dataBuffer = [dict objectForKey:@"data"];
+    unsigned int videoPTS = [[dict objectForKey:@"timestamp"] unsignedIntValue];
+    //    NSLog(@"receive: %d", [[dict objectForKey:@"sequence"] intValue]);
+    int number =  (int)[dataBuffer length];
+    uint8_t *buf = (uint8_t *)[dataBuffer bytes];
+    
+    if (!isFindIFrame && ![self detectIFrame:buf size:number]) {
+        return;
+    }
+    
+    [self decodeFramesToImage:buf size:number timeStamp:videoPTS];
+}
+
 
 
 @end

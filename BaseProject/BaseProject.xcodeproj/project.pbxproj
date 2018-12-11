@@ -26,6 +26,16 @@
 		FF9FCBAE2189A1A80079FE1D /* ZBMeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF9FCBAB2189A1A80079FE1D /* ZBMeViewController.m */; };
 		FF9FCBAF2189A1A80079FE1D /* ZBMeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FF9FCBAC2189A1A80079FE1D /* ZBMeViewController.xib */; };
 		FF9FCBB02189A1A80079FE1D /* ZBMeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FF9FCBAC2189A1A80079FE1D /* ZBMeViewController.xib */; };
+		FFA1C2EC21BF583900FD2258 /* libIOTCAPIs_ALL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FFA1C2EB21BF583900FD2258 /* libIOTCAPIs_ALL.a */; };
+		FFA1C2ED21BF583900FD2258 /* libIOTCAPIs_ALL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FFA1C2EB21BF583900FD2258 /* libIOTCAPIs_ALL.a */; };
+		FFA1C2EF21BF605700FD2258 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFA1C2EE21BF605700FD2258 /* MediaPlayer.framework */; };
+		FFA1C2F121BF606400FD2258 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFA1C2F021BF606400FD2258 /* CoreMIDI.framework */; };
+		FFA1C2F321BF607600FD2258 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FFA1C2F221BF607600FD2258 /* Accelerate.framework */; };
+		FFA1C2F521BF608700FD2258 /* libpthread.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FFA1C2F421BF608700FD2258 /* libpthread.tbd */; };
+		FFA1C2F921BF611100FD2258 /* ZBH264Decoder.m in Sources */ = {isa = PBXBuildFile; fileRef = FFA1C2F821BF611100FD2258 /* ZBH264Decoder.m */; };
+		FFA1C2FA21BF611100FD2258 /* ZBH264Decoder.m in Sources */ = {isa = PBXBuildFile; fileRef = FFA1C2F821BF611100FD2258 /* ZBH264Decoder.m */; };
+		FFA1C2FD21BFBE7900FD2258 /* ZBTutkClient.m in Sources */ = {isa = PBXBuildFile; fileRef = FFA1C2FC21BFBE7900FD2258 /* ZBTutkClient.m */; };
+		FFA1C2FE21BFBE7900FD2258 /* ZBTutkClient.m in Sources */ = {isa = PBXBuildFile; fileRef = FFA1C2FC21BFBE7900FD2258 /* ZBTutkClient.m */; };
 		FFE0CD7C218BFDDD0065173B /* MBProgressHUD+ZBAddtional.m in Sources */ = {isa = PBXBuildFile; fileRef = FFE0CD7B218BFDDD0065173B /* MBProgressHUD+ZBAddtional.m */; };
 		FFE0CD7D218BFDDD0065173B /* MBProgressHUD+ZBAddtional.m in Sources */ = {isa = PBXBuildFile; fileRef = FFE0CD7B218BFDDD0065173B /* MBProgressHUD+ZBAddtional.m */; };
 		FFE0CD8C218C24050065173B /* success@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FFE0CD80218C24040065173B /* success@3x.png */; };
@@ -129,6 +139,23 @@
 		FF9FCBB12189BF0E0079FE1D /* APIMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APIMacros.h; sourceTree = "<group>"; };
 		FF9FCBB22189BF1F0079FE1D /* NotificationMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationMacros.h; sourceTree = "<group>"; };
 		FF9FCBB32189BF2D0079FE1D /* VendorMarcos.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VendorMarcos.h; sourceTree = "<group>"; };
+		FFA1C2E321BF579200FD2258 /* platform_Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platform_Config.h; sourceTree = "<group>"; };
+		FFA1C2E421BF579300FD2258 /* AVAPIs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVAPIs.h; sourceTree = "<group>"; };
+		FFA1C2E521BF579300FD2258 /* AVFRAMEINFO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFRAMEINFO.h; sourceTree = "<group>"; };
+		FFA1C2E621BF579300FD2258 /* P2PTunnelAPIs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = P2PTunnelAPIs.h; sourceTree = "<group>"; };
+		FFA1C2E721BF579300FD2258 /* RDTAPIs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDTAPIs.h; sourceTree = "<group>"; };
+		FFA1C2E821BF579300FD2258 /* AVIOCTRLDEFs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVIOCTRLDEFs.h; sourceTree = "<group>"; };
+		FFA1C2E921BF579300FD2258 /* IOTCAPIs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOTCAPIs.h; sourceTree = "<group>"; };
+		FFA1C2EA21BF57A100FD2258 /* AVAPIs2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVAPIs2.h; sourceTree = "<group>"; };
+		FFA1C2EB21BF583900FD2258 /* libIOTCAPIs_ALL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libIOTCAPIs_ALL.a; sourceTree = "<group>"; };
+		FFA1C2EE21BF605700FD2258 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		FFA1C2F021BF606400FD2258 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
+		FFA1C2F221BF607600FD2258 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		FFA1C2F421BF608700FD2258 /* libpthread.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libpthread.tbd; path = usr/lib/libpthread.tbd; sourceTree = SDKROOT; };
+		FFA1C2F721BF611100FD2258 /* ZBH264Decoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZBH264Decoder.h; sourceTree = "<group>"; };
+		FFA1C2F821BF611100FD2258 /* ZBH264Decoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZBH264Decoder.m; sourceTree = "<group>"; };
+		FFA1C2FB21BFBE7900FD2258 /* ZBTutkClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZBTutkClient.h; sourceTree = "<group>"; };
+		FFA1C2FC21BFBE7900FD2258 /* ZBTutkClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZBTutkClient.m; sourceTree = "<group>"; };
 		FFE0CD7A218BFDDD0065173B /* MBProgressHUD+ZBAddtional.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+ZBAddtional.h"; sourceTree = "<group>"; };
 		FFE0CD7B218BFDDD0065173B /* MBProgressHUD+ZBAddtional.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+ZBAddtional.m"; sourceTree = "<group>"; };
 		FFE0CD7E218BFE730065173B /* MBProgressHUD+ZBHUDExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+ZBHUDExtension.h"; sourceTree = "<group>"; };
@@ -291,6 +318,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFA1C2F521BF608700FD2258 /* libpthread.tbd in Frameworks */,
+				FFA1C2F321BF607600FD2258 /* Accelerate.framework in Frameworks */,
+				FFA1C2F121BF606400FD2258 /* CoreMIDI.framework in Frameworks */,
+				FFA1C2EF21BF605700FD2258 /* MediaPlayer.framework in Frameworks */,
 				FFE0CE44218C36410065173B /* CoreVideo.framework in Frameworks */,
 				FFE0CE42218C363A0065173B /* AVFoundation.framework in Frameworks */,
 				FFE0CE40218C36300065173B /* AudioToolbox.framework in Frameworks */,
@@ -300,6 +331,7 @@
 				FFE0CE38218C36140065173B /* libiconv.tbd in Frameworks */,
 				FFE0CE36218C360D0065173B /* libbz2.tbd in Frameworks */,
 				FFE0CE34218C36070065173B /* libz.tbd in Frameworks */,
+				FFA1C2EC21BF583900FD2258 /* libIOTCAPIs_ALL.a in Frameworks */,
 				FFE0CE27218C34E70065173B /* libavfilter.a in Frameworks */,
 				FFE0CE25218C34E70065173B /* libavutil.a in Frameworks */,
 				A7CC26DBD44A30C78ACFB5D5 /* libPods-BaseProject.a in Frameworks */,
@@ -315,6 +347,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFA1C2ED21BF583900FD2258 /* libIOTCAPIs_ALL.a in Frameworks */,
 				FFE0CE28218C34E70065173B /* libavfilter.a in Frameworks */,
 				FFE0CE26218C34E70065173B /* libavutil.a in Frameworks */,
 				F0575C1F4E62E0548093BADC /* libPods-BaseProjectTests.a in Frameworks */,
@@ -343,6 +376,10 @@
 		BCB556E1B1384E72502479D3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FFA1C2F421BF608700FD2258 /* libpthread.tbd */,
+				FFA1C2F221BF607600FD2258 /* Accelerate.framework */,
+				FFA1C2F021BF606400FD2258 /* CoreMIDI.framework */,
+				FFA1C2EE21BF605700FD2258 /* MediaPlayer.framework */,
 				FFE0CE43218C36410065173B /* CoreVideo.framework */,
 				FFE0CE41218C363A0065173B /* AVFoundation.framework */,
 				FFE0CE3F218C36300065173B /* AudioToolbox.framework */,
@@ -476,6 +513,7 @@
 		FF9FCB8821898FA60079FE1D /* Vendors */ = {
 			isa = PBXGroup;
 			children = (
+				FFA1C2E221BF576200FD2258 /* TUTK */,
 				FFE0CDA5218C34C90065173B /* FFmpeg402 */,
 				FFE0CD75218BFC270065173B /* MBProgressHUD */,
 			);
@@ -548,6 +586,41 @@
 			path = Me;
 			sourceTree = "<group>";
 		};
+		FFA1C2E221BF576200FD2258 /* TUTK */ = {
+			isa = PBXGroup;
+			children = (
+				FFA1C2FF21BFC2FC00FD2258 /* Header */,
+				FFA1C2EB21BF583900FD2258 /* libIOTCAPIs_ALL.a */,
+				FFA1C2FB21BFBE7900FD2258 /* ZBTutkClient.h */,
+				FFA1C2FC21BFBE7900FD2258 /* ZBTutkClient.m */,
+			);
+			path = TUTK;
+			sourceTree = "<group>";
+		};
+		FFA1C2F621BF60E600FD2258 /* H264Decoder */ = {
+			isa = PBXGroup;
+			children = (
+				FFA1C2F721BF611100FD2258 /* ZBH264Decoder.h */,
+				FFA1C2F821BF611100FD2258 /* ZBH264Decoder.m */,
+			);
+			path = H264Decoder;
+			sourceTree = "<group>";
+		};
+		FFA1C2FF21BFC2FC00FD2258 /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				FFA1C2EA21BF57A100FD2258 /* AVAPIs2.h */,
+				FFA1C2E421BF579300FD2258 /* AVAPIs.h */,
+				FFA1C2E521BF579300FD2258 /* AVFRAMEINFO.h */,
+				FFA1C2E821BF579300FD2258 /* AVIOCTRLDEFs.h */,
+				FFA1C2E921BF579300FD2258 /* IOTCAPIs.h */,
+				FFA1C2E621BF579300FD2258 /* P2PTunnelAPIs.h */,
+				FFA1C2E321BF579200FD2258 /* platform_Config.h */,
+				FFA1C2E721BF579300FD2258 /* RDTAPIs.h */,
+			);
+			path = Header;
+			sourceTree = "<group>";
+		};
 		FFE0CD75218BFC270065173B /* MBProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
@@ -588,6 +661,7 @@
 		FFE0CDA5218C34C90065173B /* FFmpeg402 */ = {
 			isa = PBXGroup;
 			children = (
+				FFA1C2F621BF60E600FD2258 /* H264Decoder */,
 				FFE0CDA6218C34E50065173B /* include */,
 				FFE0CE1D218C34E70065173B /* lib */,
 			);
@@ -974,6 +1048,7 @@
 				FFE0CD7C218BFDDD0065173B /* MBProgressHUD+ZBAddtional.m in Sources */,
 				FF9FCB8321898F2B0079FE1D /* AppDelegate.m in Sources */,
 				FFEEB710218AAA61001992E2 /* ZBCacheManager.m in Sources */,
+				FFA1C2FD21BFBE7900FD2258 /* ZBTutkClient.m in Sources */,
 				FFEEB700218A96A9001992E2 /* ZBURLRequest.m in Sources */,
 				FF9FCB6C218989CE0079FE1D /* main.m in Sources */,
 				FF9FCBAD2189A1A80079FE1D /* ZBMeViewController.m in Sources */,
@@ -982,6 +1057,7 @@
 				FF9FCB9921899C000079FE1D /* ZBRootNavigationController.m in Sources */,
 				FF9FCBA62189A19B0079FE1D /* ZBHomeViewController.m in Sources */,
 				FFEEB708218AA179001992E2 /* ZBRequestEngine.m in Sources */,
+				FFA1C2F921BF611100FD2258 /* ZBH264Decoder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -992,11 +1068,13 @@
 				FF9FCB76218989CE0079FE1D /* BaseProjectTests.m in Sources */,
 				FFEEB70D218AA54A001992E2 /* NSString+ZBUTF8Encoding.m in Sources */,
 				FFE0CD7D218BFDDD0065173B /* MBProgressHUD+ZBAddtional.m in Sources */,
+				FFA1C2FE21BFBE7900FD2258 /* ZBTutkClient.m in Sources */,
 				FF9FCBA72189A19B0079FE1D /* ZBHomeViewController.m in Sources */,
 				FF9FCB9E21899C250079FE1D /* ZBRootTabBarController.m in Sources */,
 				FFEEB701218A96A9001992E2 /* ZBURLRequest.m in Sources */,
 				FFEEB705218AA159001992E2 /* ZBRequestManager.m in Sources */,
 				FFEEB711218AAA61001992E2 /* ZBCacheManager.m in Sources */,
+				FFA1C2FA21BF611100FD2258 /* ZBH264Decoder.m in Sources */,
 				FF9FCBAE2189A1A80079FE1D /* ZBMeViewController.m in Sources */,
 				FF9FCB9A21899C000079FE1D /* ZBRootNavigationController.m in Sources */,
 				FFEEB709218AA179001992E2 /* ZBRequestEngine.m in Sources */,
@@ -1162,6 +1240,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/BaseProject/Classes/Vendors/FFmpeg402/lib",
+					"$(PROJECT_DIR)/BaseProject/Classes/Vendors/TUTK",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = bigfish.BaseProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1194,6 +1273,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/BaseProject/Classes/Vendors/FFmpeg402/lib",
+					"$(PROJECT_DIR)/BaseProject/Classes/Vendors/TUTK",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = bigfish.BaseProject;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1217,6 +1297,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/BaseProject/Classes/Vendors/FFmpeg402/lib",
+					"$(PROJECT_DIR)/BaseProject/Classes/Vendors/TUTK",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = bigfish.BaseProjectTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1241,6 +1322,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/BaseProject/Classes/Vendors/FFmpeg402/lib",
+					"$(PROJECT_DIR)/BaseProject/Classes/Vendors/TUTK",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = bigfish.BaseProjectTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
