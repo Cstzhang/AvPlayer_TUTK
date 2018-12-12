@@ -25,23 +25,21 @@
 #define VIDEO_BUF_SIZE  204800
 #define SESSIONS        4
 #define ACCOUNT         "admin"
-#define PASSWORD        "12345678"
+//#define PASSWORD      "12345678"
+#define PASSWORD        "cvte123456"
 
 
 @implementation ZBTutkClient
 
-unsigned int _getTickCount()
-{
-    struct timeval tv;
-    if (gettimeofday(&tv, NULL) != 0 ) {
-        return 0;
-    }
-    return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
-}
 
+/**
+ 接收到图像数据
+
+ @param arg p2p信息
+ */
 void *thread_ReceiveVideo(void *arg)
 {
-    NSLog(@"threadReceiveVideo starting");
+    NSLog(@"thread ReceiveVideo starting");
     int avIndex  = *(int *)arg;
     char *buf    = malloc(VIDEO_BUF_SIZE);
     unsigned int frameNumber;
@@ -52,30 +50,33 @@ void *thread_ReceiveVideo(void *arg)
     int pExpectedFameSize[]    = {0};
     int pActualFrameInfoSize[] = {0};
     
-    __block int videoOrder = 0;
+//    __block int videoOrder = 0;
     
+    //循环处理接收到的图像数据
     while (1) {
-    
+        
         re = avRecvFrameData2(avIndex,
                               buf,
                               VIDEO_BUF_SIZE,
                               pActualFrameSize,
                               pExpectedFameSize,
-                              (char *)&frameInfo,
+                              (char *)&frameInfo,//frameInfo.flags IPC_FRAME_FLAG_IFRAME
                               sizeof(FRAMEINFO_t),
                               pActualFrameInfoSize,
                               &frameNumber);
         if (re > 0)
-//        if(frameInfo.flags == IPC_FRAME_FLAG_IFRAME)
         {
-            // got an IFrame, draw it.
+            // 获取到帧数据，通知进行绘制
             dispatch_async(dispatch_get_main_queue(), ^{
+                NSString *flag = [NSString stringWithFormat:@"%x", frameInfo.flags];// @"1" A/V I frame.
                 NSDictionary *dict = @{@"data":[NSData dataWithBytes:buf length:re],
-                                       @"timestamp":[NSNumber numberWithUnsignedInt:frameInfo.timestamp]
+                                       @"timestamp":[NSNumber numberWithUnsignedInt:frameInfo.timestamp],
+                                       @"frameInfoFlags" :flag,
                                        };
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"client" object:dict];
+                //通知进行解码渲染
+                [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNewBufferToDecode object:dict];
             });
-            usleep(30000);
+            usleep(15000);
         }
         else if (re == AV_ER_DATA_NOREADY)
         {
@@ -144,6 +145,7 @@ void *start_main (NSString *UID)
 {
     int re,SID;
     NSLog(@"AVStream Client Start");
+    //初始化IOTC
     re = IOTC_Initialize(0, "46.137.188.54", "122.226.84.253", "m2.iotcplatform.com", "m5.iotcplatform.com");
     NSLog(@"IOTC_Initialize() re = %d", re);
     
@@ -155,11 +157,12 @@ void *start_main (NSString *UID)
     avInitialize(SESSIONS);
     
     SID = IOTC_Get_SessionID();
+    //建立链接
     re = IOTC_Connect_ByUID_Parallel((char *)[UID UTF8String], SID);
     printf("Step 2: call IOTC_Connect_ByUID_Parallel(%s) ret(%d).......\n", [UID UTF8String], re);
+    //check
     struct st_SInfo Sinfo;
     re = IOTC_Session_Check(SID, &Sinfo);
-    
     if (re >= 0)
     {
         if(Sinfo.Mode == 0)
@@ -169,6 +172,17 @@ void *start_main (NSString *UID)
         else if (Sinfo.Mode == 2)
             printf("Device is from %s:%d[%s] Mode=LAN\n",Sinfo.RemoteIP, Sinfo.RemotePort, Sinfo.UID);
     }
+    
+    //非必须
+    const char cabBuf = 2;
+    re = IOTC_Session_Write(SID, &cabBuf, 1, 0);
+    if(re < 0)
+    {
+        printf("IOTC_Session_Write failed[%d]\n", re);
+        return NULL;
+    }
+    
+    //启动 avClient
     unsigned int srvType;
     int avIndex = avClientStart(SID, ACCOUNT, PASSWORD, 20000, &srvType, 0);
     printf("Step 3: call avClientStart(%d).......\n", avIndex);
@@ -178,7 +192,7 @@ void *start_main (NSString *UID)
         return NULL;
     }
     
-    //start
+    //通过IOCtrl发送消息开始获取音视频流
     if (start_ipcam_stream(avIndex)>0)
     {
         pthread_t ThreadVideo_ID;
@@ -188,10 +202,13 @@ void *start_main (NSString *UID)
         pthread_join(ThreadVideo_ID, NULL);
        // pthread_join(ThreadAudio_ID, NULL);
     }
+    
     avClientStop(avIndex);
     NSLog(@"avClientStop OK");
+    
     IOTC_Session_Close(SID);
     NSLog(@"IOTC_Session_Close OK");
+    
     avDeInitialize();
     IOTC_DeInitialize();
     
@@ -200,10 +217,16 @@ void *start_main (NSString *UID)
 
 }
 
+
+/**
+ 创建客户端线程接收线程 开始接收P2P数据
+
+ @param UID UID
+ */
 - (void)start:(NSString *)UID
 {
     pthread_t main_thread;
-    pthread_create(&main_thread, NULL, &start_main, (__bridge void *)UID);
+    pthread_create(&main_thread, NULL, (void *)&start_main, (__bridge void *)UID);
     pthread_detach(main_thread);
     
 }

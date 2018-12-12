@@ -9,19 +9,20 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@protocol ZBTutkClientDelegate <NSObject>
-
-@optional
-- (void)clientDidReceiveImage:(UIImage *)image;
-
-@end
+//@protocol ZBTutkClientDelegate <NSObject>
+//
+//@optional
+//
+//- (void)clientDidReceiveImage:(UIImage *)image;
+//
+//@end
 
 
 @interface ZBTutkClient : NSObject
 
 - (void)start:(NSString *)UID;
 
-@property (nonatomic, weak) id<ZBTutkClientDelegate> delegate;
+//@property (nonatomic, weak) id<ZBTutkClientDelegate> delegate;
 
 @end
 

@@ -12,12 +12,13 @@
 
 @interface ZBH264Decoder : NSObject
 
+//输出图像宽高
 @property (nonatomic,assign) int outputWidth, outputHeight;
 
-// last decoded picture
+// 当前解码出来的图像
 @property (nonatomic,strong,readonly) UIImage *currentImage;
 
-// init 
+// init decoder
 - (void)initVideoDecoder;
 
 //decode nalu

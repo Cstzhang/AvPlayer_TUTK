@@ -34,16 +34,20 @@
 
 - (void)initVideoDecoder
 {
-    avcodec_register_all();
+//    avcodec_register_all();
     
     //video
     AVCodec *codec = avcodec_find_decoder(AV_CODEC_ID_H264);
+    
     _videoCodecCtx = avcodec_alloc_context3(codec);
+    
     int re = avcodec_open2(_videoCodecCtx, codec, nil);
     if (re != 0) {
            NSLog(@"open codec failed :%d",re);
     }
+    
     _videoFrame = av_frame_alloc();
+    
     av_init_packet(&_packet);
 }
 
@@ -75,16 +79,6 @@
     self.outputHeight = _videoCodecCtx->height;
     return fSize;
 }
-
-
-
-
-
-
-
-
-
-
 
 #pragma mark - Private
 - (void)setupScale

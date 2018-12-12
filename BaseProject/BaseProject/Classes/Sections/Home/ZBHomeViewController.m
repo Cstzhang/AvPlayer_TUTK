@@ -15,21 +15,24 @@
 #import "IOTCAPIs.h"
 #import "AVFRAMEINFO.h"
 
-
-
 #define MAX_SIZE_IOCTRL_BUF        1024
+
+//#define UID                        @"C1KAB554Z3RMHH6GU1Z1"
+#define UID                        @"CNYA955MRB7CJH6GY171"
+
+#define IFRAME_FLAGS    @"1"  // IPC_FRAME_FLAG_IFRAME    = 0x01,  // A/V I frame.
+
 
 @interface ZBHomeViewController ()
 
 @property (nonatomic,strong) UIImageView *imageView;
-
 
 @end
 
 @implementation ZBHomeViewController{
     BOOL            isFindIFrame;
     BOOL            _firstDecoded;
-    CGRect          rect;
+    CGRect          rect; //显示吃尺寸
     ZBH264Decoder   *_decoder;
     
 //    OpenAL2 *_openAl2;
@@ -37,7 +40,7 @@
 //    PCMAudioRecorder *_pcmRecorder;
 //    int  _avchannelForSendAudioData;
 //    FILE *_pcmFile;
-    unsigned int _timeStamp;
+    unsigned int _timeStamp; // audio
     
 }
 
@@ -45,14 +48,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    ZBTutkClient *client = [[ZBTutkClient alloc] init];
     
-    #warning set your UID
-    [client start:@"C1KAB554Z3RMHH6GU1Z1"];
-    // add observer to show Ifame image
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveBuffer:) name:@"client" object:nil];
-    
+    //设置UI
     CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
     rect = CGRectMake(0, 20, screenWidth, screenWidth * 16 / 9);
     UIView *containerView = [[UIView alloc] initWithFrame:rect];
@@ -64,11 +61,15 @@
     
     [MBProgressHUD zb_showActivity];
     
-    
+    //初始化解码器
     [self initData];
-    
-    
 
+    //初始化P2P 客户端
+    ZBTutkClient *client = [[ZBTutkClient alloc] init];
+    [client start:UID];
+    
+    //添加监听 监听P2P传过来的图像数据，然后去解码
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveBuffer:) name:kNotificationNewBufferToDecode object:nil];
 }
 
 
@@ -76,51 +77,37 @@
 
 #pragma mark -  Private Methods
 
+
+/**
+初始化解码器
+ */
 - (void)initData
 {
     _decoder = [[ZBH264Decoder alloc] init];
     [_decoder initVideoDecoder];
-    
-    
-    
 }
 
-- (BOOL)detectIFrame:(uint8_t *)nalBuffer size:(int)size {
-    
-    NSString *string1 = @"";
-    int dataLength = size > 100 ? 100 : size;
-    for (int i = 0; i < dataLength; i ++) {
-        NSString *temp = [NSString stringWithFormat:@"%x", nalBuffer[i]&0xff];
-        if ([temp length] == 1) {
-            temp = [NSString stringWithFormat:@"0%@", temp];
-        }
-        string1 = [string1 stringByAppendingString:temp];
-    }
-    //    NSLog(@"%d,,%@",size,string1);
-    NSRange range = [string1 rangeOfString:@"00000000165"];
-    if (range.location == NSNotFound) {
-        isFindIFrame = NO;
-        return NO;
-    } else {
-        isFindIFrame = YES;
-        [MBProgressHUD zb_hideHUD];
-        return YES;
-    }
-    
-}
+/**
+ 解码数据
 
+ @param nalBuffer nalBuffer
+ @param inSize frame size
+ @param pts pts
+ */
 - (void)decodeFramesToImage:(uint8_t *)nalBuffer size:(int)inSize timeStamp:(unsigned int)pts {
     
-    //    调节分辨率后，能自适应，但清晰度有问题
-    //    经过确认，是output值设置的问题。outputWidth、outputHeight代表输出图像的宽高，设置的和分辨率一样，是最清晰的效果
-
+    //解码
     CGSize fSize = [_decoder decodeNalu:nalBuffer frameSize:inSize timeStamp:pts];
+    
     if (fSize.width == 0) {
+        NSLog(@"nalBuffer size is 0");
         return;
     }
     
+    //获取当前最新解码的image
     UIImage *image = [_decoder currentImage];
     
+    //主线程显示image
     if (image) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.imageView.image = image;
@@ -128,7 +115,30 @@
     }
 }
 
+/**
+  判断是不是关键帧
 
+ @param frameInfoFlags IPC_FRAME_FLAG_IFRAME    = 0x01,  // A/V I frame.
+ @return yes or no
+ */
+- (BOOL)detectIFrame:(NSString *)frameInfoFlags
+{
+    if ([frameInfoFlags isEqualToString:IFRAME_FLAGS]) {
+        isFindIFrame = NO;
+        return NO;
+    } else {
+        isFindIFrame = YES;
+        [MBProgressHUD zb_hideHUD];
+        return YES;
+    }
+}
+
+
+/**
+ 获取一张黑色的图片
+
+ @return Black Image
+ */
 - (UIImage *)getBlackImage
 {
     CGSize imageSize = CGSizeMake(50, 50);
@@ -141,26 +151,32 @@
 }
 
 
-#pragma mark - Public method
+#pragma mark - NSNotificationCenter
 
+/**
+ 收到通知解码图片
 
-
-
-
-
-
+ @param notification 通知信息包含图片data 时间戳
+ */
 - (void)receiveBuffer:(NSNotification *)notification{
+    
     NSDictionary *dict = (NSDictionary *)notification.object;
+    
     NSData *dataBuffer = [dict objectForKey:@"data"];
+    
     unsigned int videoPTS = [[dict objectForKey:@"timestamp"] unsignedIntValue];
-    //    NSLog(@"receive: %d", [[dict objectForKey:@"sequence"] intValue]);
+    
+    NSString * infoFlag = [dict objectForKey:@"frameInfoFlags"];
+    
     int number =  (int)[dataBuffer length];
+    
     uint8_t *buf = (uint8_t *)[dataBuffer bytes];
     
-    if (!isFindIFrame && ![self detectIFrame:buf size:number]) {
+    //当前没有收到关键帧 而且当前帧帧不是关键帧  则不渲染（先check 是否已经收到关键帧）
+    if (!isFindIFrame && ![self detectIFrame:infoFlag]) {
+        NSLog(@"did not find IFrame!");
         return;
     }
-    
     [self decodeFramesToImage:buf size:number timeStamp:videoPTS];
 }
 

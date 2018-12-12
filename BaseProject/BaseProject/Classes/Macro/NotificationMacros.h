@@ -9,5 +9,6 @@
 #ifndef NotificationMacros_h
 #define NotificationMacros_h
 
+#define kNotificationNewBufferToDecode @"kNotificationNewBufferToDecode"
 
 #endif /* NotificationMacros_h */
