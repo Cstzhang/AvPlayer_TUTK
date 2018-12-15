@@ -95,6 +95,8 @@
 		FFEEB70D218AA54A001992E2 /* NSString+ZBUTF8Encoding.m in Sources */ = {isa = PBXBuildFile; fileRef = FFEEB70B218AA54A001992E2 /* NSString+ZBUTF8Encoding.m */; };
 		FFEEB710218AAA61001992E2 /* ZBCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FFEEB70F218AAA61001992E2 /* ZBCacheManager.m */; };
 		FFEEB711218AAA61001992E2 /* ZBCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FFEEB70F218AAA61001992E2 /* ZBCacheManager.m */; };
+		FFFB855521C4A9820041EF21 /* PCMDataPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = FFFB855421C4A9820041EF21 /* PCMDataPlayer.mm */; };
+		FFFB855621C4A9820041EF21 /* PCMDataPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = FFFB855421C4A9820041EF21 /* PCMDataPlayer.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -311,6 +313,8 @@
 		FFEEB70E218AAA61001992E2 /* ZBCacheManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZBCacheManager.h; sourceTree = "<group>"; };
 		FFEEB70F218AAA61001992E2 /* ZBCacheManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZBCacheManager.m; sourceTree = "<group>"; };
 		FFEEB715218AF1B5001992E2 /* ZBNetworking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZBNetworking.h; sourceTree = "<group>"; };
+		FFFB855321C4A9820041EF21 /* PCMDataPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCMDataPlayer.h; sourceTree = "<group>"; };
+		FFFB855421C4A9820041EF21 /* PCMDataPlayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = PCMDataPlayer.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -513,6 +517,7 @@
 		FF9FCB8821898FA60079FE1D /* Vendors */ = {
 			isa = PBXGroup;
 			children = (
+				FFFB855221C4A9630041EF21 /* PCMDataPlayer */,
 				FFA1C2E221BF576200FD2258 /* TUTK */,
 				FFE0CDA5218C34C90065173B /* FFmpeg402 */,
 				FFE0CD75218BFC270065173B /* MBProgressHUD */,
@@ -875,6 +880,15 @@
 			path = ZBNetworking;
 			sourceTree = "<group>";
 		};
+		FFFB855221C4A9630041EF21 /* PCMDataPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				FFFB855321C4A9820041EF21 /* PCMDataPlayer.h */,
+				FFFB855421C4A9820041EF21 /* PCMDataPlayer.mm */,
+			);
+			path = PCMDataPlayer;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1054,6 +1068,7 @@
 				FF9FCBAD2189A1A80079FE1D /* ZBMeViewController.m in Sources */,
 				FFEEB70C218AA54A001992E2 /* NSString+ZBUTF8Encoding.m in Sources */,
 				FF9FCB9D21899C250079FE1D /* ZBRootTabBarController.m in Sources */,
+				FFFB855521C4A9820041EF21 /* PCMDataPlayer.mm in Sources */,
 				FF9FCB9921899C000079FE1D /* ZBRootNavigationController.m in Sources */,
 				FF9FCBA62189A19B0079FE1D /* ZBHomeViewController.m in Sources */,
 				FFEEB708218AA179001992E2 /* ZBRequestEngine.m in Sources */,
@@ -1074,6 +1089,7 @@
 				FFEEB701218A96A9001992E2 /* ZBURLRequest.m in Sources */,
 				FFEEB705218AA159001992E2 /* ZBRequestManager.m in Sources */,
 				FFEEB711218AAA61001992E2 /* ZBCacheManager.m in Sources */,
+				FFFB855621C4A9820041EF21 /* PCMDataPlayer.mm in Sources */,
 				FFA1C2FA21BF611100FD2258 /* ZBH264Decoder.m in Sources */,
 				FF9FCBAE2189A1A80079FE1D /* ZBMeViewController.m in Sources */,
 				FF9FCB9A21899C000079FE1D /* ZBRootNavigationController.m in Sources */,
