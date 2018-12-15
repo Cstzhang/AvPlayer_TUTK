@@ -31,6 +31,57 @@
 
 @implementation ZBTutkClient
 
+void *thread_ReceiveAudio(void *arg)
+{
+    NSLog(@"thread ReceiveAudio Starting...");
+    int avIndex = *(int *)arg;
+    char *buf   = malloc(AUDIO_BUF_SIZE);
+    unsigned int frameNumber;
+    int re;
+    FRAMEINFO_t frameInfo;
+    __block int sequenceNumber = 0;
+    
+    //PCMDataPlayer *_pcmPlayer = [[PCMDataPlayer alloc] init];
+    
+    //接收音频数据
+    while (1) {
+        re = avCheckAudioBuf(avIndex);
+        if (re < 0) break;
+        if (re < 3) {
+            usleep(120000);
+            continue;
+        }
+        re  = avRecvAudioData(avIndex, buf, AUDIO_BUF_SIZE, (char *)&frameInfo, sizeof(FRAMEINFO_t), &frameNumber);
+        if(re == AV_ER_SESSION_CLOSE_BY_REMOTE)
+        {
+            NSLog(@"thread ReceiveAudio AV_ER_SESSION_CLOSE_BY_REMOTE");
+            break;
+        }
+        else if(re == AV_ER_REMOTE_TIMEOUT_DISCONNECT)
+        {
+            NSLog(@"thread ReceiveAudio AV_ER_REMOTE_TIMEOUT_DISCONNECT");
+            break;
+        }
+        else if(re == IOTC_ER_INVALID_SID)
+        {
+            NSLog(@"thread ReceiveAudio Session cant be used anymore");
+            break;
+        }
+        else if (re == AV_ER_LOSED_THIS_FRAME)
+        {
+            continue;
+        }
+        if (re > 0) {
+            short requestBuf[re * 2];
+            #pragma mark - TODO
+            // 解码
+            // 播放器播放
+        }
+    }
+    NSLog(@"thread ReceiveAudio thread exit");
+    return 0;
+}
+
 
 /**
  接收到图像数据
@@ -39,7 +90,7 @@
  */
 void *thread_ReceiveVideo(void *arg)
 {
-    NSLog(@"thread ReceiveVideo starting");
+    NSLog(@"thread ReceiveVideo Starting...");
     int avIndex  = *(int *)arg;
     char *buf    = malloc(VIDEO_BUF_SIZE);
     unsigned int frameNumber;
@@ -160,6 +211,12 @@ void *start_main (NSString *UID)
     //建立链接
     re = IOTC_Connect_ByUID_Parallel((char *)[UID UTF8String], SID);
     printf("Step 2: call IOTC_Connect_ByUID_Parallel(%s) ret(%d).......\n", [UID UTF8String], re);
+    if(re < 0)
+    {
+        printf("IOTC_Connect_ByUID_Parallel failed[%d]\n", re);
+        return NULL;
+    }
+    
     //check
     struct st_SInfo Sinfo;
     re = IOTC_Session_Check(SID, &Sinfo);
@@ -173,7 +230,7 @@ void *start_main (NSString *UID)
             printf("Device is from %s:%d[%s] Mode=LAN\n",Sinfo.RemoteIP, Sinfo.RemotePort, Sinfo.UID);
     }
     
-    //非必须
+    //非必须调用的接口
     const char cabBuf = 2;
     re = IOTC_Session_Write(SID, &cabBuf, 1, 0);
     if(re < 0)
@@ -195,12 +252,11 @@ void *start_main (NSString *UID)
     //通过IOCtrl发送消息开始获取音视频流
     if (start_ipcam_stream(avIndex)>0)
     {
-        pthread_t ThreadVideo_ID;
-        //pthread_t ThreadVideo_ID, ThreadAudio_ID;
+        pthread_t ThreadVideo_ID, ThreadAudio_ID;
         pthread_create(&ThreadVideo_ID, NULL, &thread_ReceiveVideo, (void *)&avIndex);
-        //pthread_create(&ThreadAudio_ID, NULL, &thread_ReceiveAudio, (void *)&avIndex);
+        pthread_create(&ThreadAudio_ID, NULL, &thread_ReceiveAudio, (void *)&avIndex);
         pthread_join(ThreadVideo_ID, NULL);
-       // pthread_join(ThreadAudio_ID, NULL);
+        pthread_join(ThreadAudio_ID, NULL);
     }
     
     avClientStop(avIndex);
