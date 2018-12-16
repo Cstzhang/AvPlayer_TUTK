@@ -1237,7 +1237,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 882QX692N8;
+				DEVELOPMENT_TEAM = Y5WX43KK4M;
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/BaseProject/Classes/Macro/ZBPrefixHeader.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1270,7 +1270,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 882QX692N8;
+				DEVELOPMENT_TEAM = Y5WX43KK4M;
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/BaseProject/Classes/Macro/ZBPrefixHeader.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
